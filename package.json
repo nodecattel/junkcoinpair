@@ -1,7 +1,7 @@
 {
   "name": "luckycoinpair",
   "version": "0.0.1",
-  "description": "Client-side LuckyCoin JavaScript library ECPair",
+  "description": "Client-side JavaScript library for LuckyCoin with ECPair",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "engines": {
