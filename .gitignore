@@ -4,5 +4,4 @@ node_modules
 npm-debug.log
 test/*.js
 !test/ts-node-register.js
-src
 bun.lockb
