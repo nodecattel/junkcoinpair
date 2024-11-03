@@ -47,7 +47,7 @@
   ],
   "dependencies": {
     "@noble/hashes": "1.3.3",
-    "luckycoinjs-lib": "github:impredmet/luckycoinjs-lib",
+    "luckycoinjs-lib": "^0.0.2",
     "typeforce": "1.18.0",
     "wif": "4.0.0"
   },
