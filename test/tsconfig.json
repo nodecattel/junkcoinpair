@@ -1,0 +1,22 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNEXT",
+    "module": "commonjs",
+    "noEmit": true,
+    "rootDir": "../",
+    "sourceMap": true,
+    "types": [
+      "node",
+      "mocha"
+    ],
+    "esModuleInterop": true
+  },
+  "include": [
+    "../ts_src/**/*.ts",
+    "./*.test.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

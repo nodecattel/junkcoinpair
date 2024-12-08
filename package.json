@@ -28,19 +28,20 @@
     "gitdiff:ci": "npm run build && git diff --exit-code",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "lint:tests": "tslint -p test/tsconfig.json -c tslint.json",
-    "mocha:ts": "mocha --recursive --require test/ts-node-register",
+    "mocha:ts": "mocha -r ts-node/register 'test/**/*.test.ts'",
     "nobuild:coverage-report": "nyc report --reporter=lcov",
     "nobuild:coverage-html": "nyc report --reporter=html",
-    "nobuild:coverage": "npm run build:tests && nyc --check-coverage --branches 90 --functions 90 --lines 90 mocha && npm run clean:jstests",
-    "nobuild:unit": "npm run mocha:ts -- 'test/*.ts'",
+    "nobuild:coverage": "npm run build:tests && nyc --check-coverage --branches 90 --functions 90 --lines 90 mocha -r ts-node/register 'test/**/*.test.ts' && npm run clean:jstests",
+    "nobuild:unit": "npm run mocha:ts -- 'test/*.test.ts'",
     "prettier": "prettier \"ts_src/**/*.ts\" \"test/**/*.ts\" --ignore-path ./.prettierignore",
     "prettierjs": "prettier \"src/**/*.js\" --ignore-path ./.prettierignore",
     "test": "npm run build && npm run format:ci && npm run lint && npm run nobuild:coverage",
-    "unit": "npm run build && npm run nobuild:unit"
+    "unit": "npm run build && npm run nobuild:unit",
+    "test:all": "npm run test && npm run coverage"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bitcoinjs/ecpair.git"
+    "url": "https://github.com/junkcoins/junkcoinpair.git"
   },
   "files": [
     "src"
@@ -50,6 +51,7 @@
     "debug": "^4.3.1",
     "glob": "^11.0.0",
     "junkcoinjs-lib": "^0.0.1",
+    "tiny-secp256k1": "^2.2.3",
     "typeforce": "1.18.0",
     "wif": "4.0.0"
   },
