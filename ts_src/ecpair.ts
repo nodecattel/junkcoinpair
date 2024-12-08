@@ -1,5 +1,5 @@
 import { randomBytes } from '@noble/hashes/utils';
-import { Network, networks } from 'luckycoinjs-lib';
+import { Network, networks } from 'junkcoinjs-lib';
 import * as wif from 'wif';
 import * as types from './types';
 
@@ -112,7 +112,7 @@ export function ECPairFactory(ecc: TinySecp256k1Interface): ECPairAPI {
     const decoded = wif.decode(wifString);
     const version = decoded.version;
 
-    const network = networks.luckycoin;
+    const network = networks.junkcoin;
 
     if (version !== (network as Network).wif)
       throw new Error('Invalid network version');
@@ -150,7 +150,7 @@ export function ECPairFactory(ecc: TinySecp256k1Interface): ECPairAPI {
       if (options === undefined) options = {};
       this.compressed =
         options.compressed === undefined ? true : options.compressed;
-      this.network = networks.luckycoin;
+      this.network = networks.junkcoin;
 
       if (__Q !== undefined)
         this.__Q = Buffer.from(ecc.pointCompress(__Q, this.compressed));

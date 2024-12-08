@@ -2,7 +2,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.ECPairFactory = void 0;
 const utils_1 = require('@noble/hashes/utils');
-const luckycoinjs_lib_1 = require('luckycoinjs-lib');
+const junkcoinjs_lib_1 = require('junkcoinjs-lib');
 const wif = require('wif');
 const types = require('./types');
 const isOptions = types.typeforce.maybe(
@@ -32,7 +32,7 @@ function ECPairFactory(ecc) {
   function fromWIF(wifString) {
     const decoded = wif.decode(wifString);
     const version = decoded.version;
-    const network = luckycoinjs_lib_1.networks.luckycoin;
+    const network = junkcoinjs_lib_1.networks.junkcoin;
     if (version !== network.wif) throw new Error('Invalid network version');
     return fromPrivateKey(Buffer.from(decoded.privateKey), {
       compressed: decoded.compressed,
@@ -63,7 +63,7 @@ function ECPairFactory(ecc) {
       if (options === undefined) options = {};
       this.compressed =
         options.compressed === undefined ? true : options.compressed;
-      this.network = luckycoinjs_lib_1.networks.luckycoin;
+      this.network = junkcoinjs_lib_1.networks.junkcoin;
       if (__Q !== undefined)
         this.__Q = Buffer.from(ecc.pointCompress(__Q, this.compressed));
     }

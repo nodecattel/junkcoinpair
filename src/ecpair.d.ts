@@ -1,6 +1,6 @@
 /// <reference types="node" />
 /// <reference types="node" />
-import { Network } from 'luckycoinjs-lib';
+import { Network } from 'junkcoinjs-lib';
 interface ECPairOptions {
     compressed?: boolean;
     rng?(arg0: number): Buffer;
