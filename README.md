@@ -1,48 +1,89 @@
-# ecpair
-[![Github CI](https://github.com/bitcoinjs/ecpair/actions/workflows/main_ci.yml/badge.svg)](https://github.com/bitcoinjs/ecpair/actions/workflows/main_ci.yml) [![NPM](https://img.shields.io/npm/v/ecpair.svg)](https://www.npmjs.org/package/ecpair) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+# junkcoinpair
 
-A library for managing SECP256k1 keypairs written in TypeScript with transpiled JavaScript committed to git.
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
+A library for managing SECP256k1 keypairs for JunkCoin, written in TypeScript with transpiled JavaScript committed to git.
+
+## Installation
+
+```bash
+npm install junkcoinpair
+```
 
 ## Example
 
 TypeScript
-
-``` typescript
-import { Signer, SignerAsync, ECPairInterface, ECPairFactory, ECPairAPI, TinySecp256k1Interface } from 'ecpair';
+```typescript
+import { ECPairFactory, ECPairInterface } from 'junkcoinpair';
 import * as crypto from 'crypto';
 
-// You need to provide the ECC library. The ECC library must implement 
-// all the methods of the `TinySecp256k1Interface` interface.
-const tinysecp: TinySecp256k1Interface = require('tiny-secp256k1');
-const ECPair: ECPairAPI = ECPairFactory(tinysecp);
+// Initialize with tiny-secp256k1
+const tinysecp = require('tiny-secp256k1');
+const ECPair = ECPairFactory(tinysecp);
 
-// You don't need to explicitly write ECPairInterface, but just to show
-// that the keyPair implements the interface this example includes it.
+// Generate random keypair
+const keyPair = ECPair.makeRandom();
 
-// From WIF
-const keyPair1: ECPairInterface = ECPair.fromWIF('KynD8ZKdViVo5W82oyxvE18BbG6nZPVQ8Td8hYbwU94RmyUALUik');
-// Random private key
-const keyPair2 = ECPair.fromPrivateKey(crypto.randomBytes(32));
-// OR (uses randombytes library, compatible with browser)
-const keyPair3 = ECPair.makeRandom();
-// OR use your own custom random buffer generator BE CAREFUL!!!!
-const customRandomBufferFunc = (size: number): Buffer => crypto.randomBytes(size);
-const keyPair4 = ECPair.makeRandom({ rng: customRandomBufferFunc });
-// From pubkey (33 or 65 byte DER format public key)
-const keyPair5 = ECPair.fromPublicKey(keyPair1.publicKey);
+// Create from WIF
+const fromWif = ECPair.fromWIF('your_wif_key_here');
 
-// Pass a custom network
-const network = {}; // Your custom network object here
-ECPair.makeRandom({ network });
-ECPair.fromPrivateKey(crypto.randomBytes(32), { network });
-ECPair.fromPublicKey(keyPair1.publicKey, { network });
-// fromWIF will check the WIF version against the network you pass in
-// pass in multiple networks if you are not sure
-ECPair.fromWIF('wif key...', network);
-const network2 = {}; // Your custom network object here
-const network3 = {}; // Your custom network object here
-ECPair.fromWIF('wif key...', [network, network2, network3]);
+// Create from private key
+const fromPrivate = ECPair.fromPrivateKey(crypto.randomBytes(32));
+
+// Create from public key (33 or 65 byte DER format)
+const fromPublic = ECPair.fromPublicKey(keyPair.publicKey);
+
+// Sign a message
+const message = crypto.createHash('sha256').update('hello world').digest();
+const signature = keyPair.sign(message);
+
+// Verify a signature
+const isValid = keyPair.verify(message, signature);
 ```
 
-## LICENSE [MIT](LICENSE)
-Written and tested by [bitcoinjs-lib](https://github.com/bitcoinjs/bitcoinjs-lib) contributors since 2014.
+## Features
+
+- Generate random keypairs
+- Import/export private keys in WIF format
+- Create keypairs from private or public keys
+- Sign messages and verify signatures
+- Support for compressed and uncompressed public keys
+- Schnorr signature support (when available)
+- TypeScript support with full type definitions
+
+## API
+
+### ECPairFactory(secp256k1)
+Creates an ECPair API using the provided secp256k1 implementation.
+
+### ECPair Methods
+
+- `makeRandom([options])`: Generate a random keypair
+- `fromPrivateKey(buffer[, options])`: Create a keypair from a private key
+- `fromPublicKey(buffer[, options])`: Create a keypair from a public key
+- `fromWIF(string)`: Create a keypair from a WIF string
+
+### Instance Methods
+
+- `sign(hash)`: Sign a 32-byte hash
+- `verify(hash, signature)`: Verify a signature
+- `toWIF()`: Export private key as WIF
+- `tweak(buffer)`: Derive a new keypair by tweaking the current one
+
+## Testing
+
+```bash
+npm test
+```
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](LICENSE)
+
+Based on [bitcoinjs/ecpair](https://github.com/bitcoinjs/ecpair), modified for JunkCoin.
