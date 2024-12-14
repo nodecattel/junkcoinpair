@@ -3,7 +3,6 @@
 import { Network } from 'junkcoinjs-lib';
 interface ECPairOptions {
     compressed?: boolean;
-    network?: any;
     rng?(arg0: number): Buffer;
 }
 export interface Signer {
