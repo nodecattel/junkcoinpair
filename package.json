@@ -1,6 +1,6 @@
 {
   "name": "junkcoinpair",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Client-side JavaScript library for JunkCoin with ECPair",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
@@ -50,7 +50,7 @@
     "@noble/hashes": "1.3.3",
     "debug": "^4.3.1",
     "glob": "^11.0.0",
-    "junkcoinjs-lib": "^0.0.6",
+    "junkcoinjs-lib": "^0.0.7",
     "tiny-secp256k1": "^2.2.3",
     "typeforce": "1.18.0",
     "wif": "4.0.0"
