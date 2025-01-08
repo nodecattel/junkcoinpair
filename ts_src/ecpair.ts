@@ -1,7 +1,7 @@
+import * as types from './types';
+import * as wif from 'wif';
 import { randomBytes } from '@noble/hashes/utils';
 import { Network, networks } from 'junkcoinjs-lib';
-import * as wif from 'wif';
-import * as types from './types';
 
 const isOptions = types.typeforce.maybe(
   types.typeforce.compile({
@@ -15,6 +15,7 @@ const toXOnly = (pubKey: Buffer) =>
 
 interface ECPairOptions {
   compressed?: boolean;
+  network?: Network;
   rng?(arg0: number): Buffer;
 }
 
@@ -108,17 +109,34 @@ export function ECPairFactory(ecc: TinySecp256k1Interface): ECPairAPI {
     return new ECPair(undefined, buffer, options);
   }
 
-  function fromWIF(wifString: string): ECPairInterface {
+  function fromWIF(
+    wifString: string,
+    network?: Network | Network[],
+  ): ECPairInterface {
     const decoded = wif.decode(wifString);
     const version = decoded.version;
 
-    const network = networks.junkcoin;
+    // list of networks?
+    if (types.Array(network)) {
+      network = (network as Network[])
+        .filter((x: Network) => {
+          return version === x.wif;
+        })
+        .pop() as Network;
 
-    if (version !== (network as Network).wif)
-      throw new Error('Invalid network version');
+      if (!network) throw new Error('Unknown network version');
+
+      // otherwise, assume a network object (or default to bitcoin)
+    } else {
+      network = network || networks.junkcoin;
+
+      if (version !== (network as Network).wif)
+        throw new Error('Invalid network version');
+    }
 
     return fromPrivateKey(Buffer.from(decoded.privateKey), {
       compressed: decoded.compressed,
+      network: network as Network,
     });
   }
 
@@ -150,7 +168,7 @@ export function ECPairFactory(ecc: TinySecp256k1Interface): ECPairAPI {
       if (options === undefined) options = {};
       this.compressed =
         options.compressed === undefined ? true : options.compressed;
-      this.network = networks.junkcoin;
+      this.network = options.network || networks.junkcoin;
 
       if (__Q !== undefined)
         this.__Q = Buffer.from(ecc.pointCompress(__Q, this.compressed));
@@ -213,7 +231,7 @@ export function ECPairFactory(ecc: TinySecp256k1Interface): ECPairAPI {
       ]);
       return fromPublicKey(
         Buffer.concat([parityByte, tweakedPublicKey.xOnlyPubkey]),
-        { compressed: this.compressed },
+        { network: this.network, compressed: this.compressed },
       );
     }
 
@@ -229,6 +247,7 @@ export function ECPairFactory(ecc: TinySecp256k1Interface): ECPairAPI {
       if (!tweakedPrivateKey) throw new Error('Invalid tweaked private key!');
 
       return fromPrivateKey(Buffer.from(tweakedPrivateKey), {
+        network: this.network,
         compressed: this.compressed,
       });
     }
